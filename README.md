@@ -9,3 +9,11 @@ https://www.linkedin.com/pulse/building-scalper-bot-alex-g
 https://spltech.co.uk/how-to-make-a-python-bot/  
 
 I decided to build in Python and here we are.
+
+## Installation
+
+To install the bot first ensure Python 3.9+ is installed on your machine. Then run
+
+```bash
+bash ./scripts/install.sh
+```
