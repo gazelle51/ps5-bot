@@ -14,7 +14,7 @@ URL = 'https://www.newegg.com/global/au-en/p/pl?N=100203018%20601357248'
 
 # Initialise beautiful soup
 page = requests.get(URL)
-soup = BeautifulSoup(page.content)
+soup = BeautifulSoup(page.content, features='html.parser')
 
 # # Close Chrome
 # wd.close()
@@ -41,5 +41,3 @@ df = pd.DataFrame.from_records(rows, columns=['Item Title', 'Status'])
 
 # Check if any of the items are in stock
 isAvailable = 'AVAILABLE' in df['Status'].values
-
-print(isAvailable)
