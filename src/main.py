@@ -4,8 +4,8 @@ import requests
 
 # PS5 Consoles Search Results
 URLS = [
-    'https://www.bigw.com.au/gaming/ps5/ps5-consoles/c/64121178100/',  # PS5 search results
-    'https://www.bigw.com.au/search?text=console'  # Console search results
+    'https://www.bigw.com.au/gaming/ps5/ps5-consoles/c/64121178100/',  # PS5 consoles
+    # 'https://www.bigw.com.au/gaming/nintendo-switch/nintendo-switch-consoles/c/6412113100/'  # Switch consoles
 ]
 #       'https://www.bigw.com.au/product/playstation-5-console/p/124625/',  # Coming soon
 #       'https://www.bigw.com.au/product/playstation-5-digital-edition-console/p/124626/',  # Coming soon
