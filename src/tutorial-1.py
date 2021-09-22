@@ -44,3 +44,6 @@ df = pd.DataFrame.from_records(rows, columns=['Item Title', 'Status'])
 
 # Check if any of the items are in stock
 isAvailable = 'AVAILABLE' in df['Status'].values
+
+if isAvailable:
+    print('Something is in stock')
