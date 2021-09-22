@@ -1,3 +1,6 @@
+# Checking if items are in stock
+# Script built from tutorial at https://spltech.co.uk/how-to-make-a-python-bot/
+
 from bs4 import BeautifulSoup
 from selenium import webdriver as wd
 import chromedriver_binary
