@@ -17,3 +17,15 @@ To install the bot first ensure Python 3.9+ is installed on your machine. Then r
 ```bash
 bash ./scripts/install.sh
 ```
+
+
+## Chrome profile
+
+1. Open Chrome
+2. Click user icon and "Add" other profile.
+3. Fill in details
+4. In browser go to chrome://version/
+5. Get profile path from there but remove last folder from end
+  e.g., /Users/username/Library/Application Support/Google/Chrome
+6. The last folder is the profile name
+  e.g., Profile 2
