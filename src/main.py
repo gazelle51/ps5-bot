@@ -10,7 +10,6 @@ import time
 
 load_dotenv()
 
-USER_DATA_DIR = os.environ.get('USER_DATA_DIR')
 PROFILE_NAME = os.environ.get('PROFILE_NAME')
 POSTCODE = os.environ.get('POSTCODE')
 
@@ -29,10 +28,15 @@ PS5_URLS = [
 CART_URL = 'https://www.bigw.com.au/cart'
 CHECKOUT_URL = 'https://www.bigw.com.au/checkout/delivery'
 
+# Create images folder
+if not os.path.exists('images'):
+    os.makedirs('images')
+
+# Set Chrome options
 options = webdriver.ChromeOptions()
 options.add_argument('--ignore-certificate-errors')
-options.add_argument('--user-data-dir='+USER_DATA_DIR)
-options.add_argument('--profile-directory=Profile 2')
+options.add_argument('--user-data-dir=./Chrome')
+options.add_argument('--profile-directory=' + PROFILE_NAME)
 # options.add_argument('--headless')
 
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36',
@@ -150,7 +154,7 @@ for URL in PS5_URLS:
 
     # Navigate to URL
     wd.get(URL)
-    wd.save_screenshot('ps5.png')
+    wd.save_screenshot('images/ps5.png')
 
     # Add to cart if available
     add_to_cart_result = _add_to_cart(wd)
@@ -179,9 +183,9 @@ for URL in PS5_URLS:
     # Stop looping if we successfully added to cart
     break
 
-# Go to checkout
-wd.get(CHECKOUT_URL)
-wd.save_screenshot('checkout.png')
+# Go to cart
+wd.get(CART_URL)
+wd.save_screenshot('images/cart.png')
 
 # wd.close()
 # wd.quit()
