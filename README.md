@@ -24,10 +24,11 @@ bash ./scripts/install.sh
 1. Open Chrome
 2. Click user icon and "Add" other profile.
 3. Fill in details
-4. In browser go to chrome://version/
-5. Note the profile path and navigate to that folder.
-6. Copy the folder.
-7. Create a new folder inside this repo called 'Chrome'.
-8. Paste the profile folder inside the 'Chrome' folder. 
-9. The folder name is the profile name
+4. Go to Big W, make sure you set a local store, log in to your account and the details are kept in cookies.
+5. In browser go to chrome://version/
+6. Note the profile path and navigate to that folder.
+7. Copy the folder.
+8. Create a new folder inside this repo called 'Chrome'.
+9. Paste the profile folder inside the 'Chrome' folder. 
+10. The folder name is the profile name
   e.g., Profile 2

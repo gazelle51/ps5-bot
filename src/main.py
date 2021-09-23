@@ -11,7 +11,6 @@ import time
 load_dotenv()
 
 PROFILE_NAME = os.environ.get('PROFILE_NAME')
-POSTCODE = os.environ.get('POSTCODE')
 
 # PS5 Consoles Search Results
 SEARCH_URLS = [
@@ -26,7 +25,6 @@ PS5_URLS = [
 ]
 
 CART_URL = 'https://www.bigw.com.au/cart'
-CHECKOUT_URL = 'https://www.bigw.com.au/checkout/delivery'
 
 # Create images folder
 if not os.path.exists('images'):
@@ -160,25 +158,7 @@ for URL in PS5_URLS:
     add_to_cart_result = _add_to_cart(wd)
     if not add_to_cart_result:
         continue
-
-    # Check if postcode needs to be set
-    postcode_input = wd.find_elements_by_id('react-select-2-input')
-
-    if len(postcode_input) == 1:
-        # Enter postcode
-        postcode_input[0].send_keys(POSTCODE)
-        time.sleep(1)
-        postcode_input[0].send_keys(Keys.ENTER)
-        time.sleep(1)
-
-        # Save postcode
-        save_button = wd.find_element_by_css_selector('.Button.variant-primary.size-normal.save-button')
-        save_button.click()
-
-        # Add to cart
-        add_to_cart_result_2 = _add_to_cart(wd)
-        if not add_to_cart_result_2:
-            continue
+    time.sleep(0.5)
 
     # Stop looping if we successfully added to cart
     break
@@ -186,6 +166,16 @@ for URL in PS5_URLS:
 # Go to cart
 wd.get(CART_URL)
 wd.save_screenshot('images/cart.png')
+
+# Proceed to checkout
+wd.find_element_by_xpath(
+    '//div[@class="cart-summary-buttons"]/button[@class="Button variant-primary size-normal"]') \
+    .click()
+wd.find_element_by_xpath(
+    '//div[@class="proceed-button"]/button[@class="Button variant-primary size-normal"]') \
+    .click()
+time.sleep(1.25)
+wd.save_screenshot('images/checkout.png')
 
 # wd.close()
 # wd.quit()
