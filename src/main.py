@@ -8,6 +8,7 @@ import time
 
 from bigw.cart import add_to_cart
 from bigw.checkout import proceed_to_checkout
+from bigw.payment import proceed_to_payment
 
 load_dotenv()
 
@@ -35,39 +36,51 @@ options.add_argument('--profile-directory=' + PROFILE_NAME)
 
 # Open Chrome
 wd = webdriver.Chrome(options=options)
+wd.implicitly_wait(10)
 
-# Add PS5 to cart
-item_in_cart = False
-for URL in PS5_URLS:
-    print('Checking {}'.format(URL))
+try:
+    # Add PS5 to cart
+    item_in_cart = False
+    for URL in PS5_URLS:
+        print('Checking {}'.format(URL))
 
-    # Navigate to URL
-    wd.get(URL)
-    wd.save_screenshot('images/ps5.png')
+        # Navigate to URL
+        wd.get(URL)
+        wd.save_screenshot('images/ps5.png')
 
-    # Add to cart if available
-    add_to_cart_result = add_to_cart(wd)
-    if not add_to_cart_result:
-        continue
-    time.sleep(0.5)
+        # Add to cart if available
+        add_to_cart_result = add_to_cart(wd)
+        if not add_to_cart_result:
+            continue
+        time.sleep(0.5)
 
-    # Stop looping if we successfully were able to add to cart
-    item_in_cart = True
-    break
+        # Stop looping if we successfully were able to add to cart
+        item_in_cart = True
+        break
 
-if not item_in_cart:
-    print('No items in stock, stopping')
-    exit()
+    if not item_in_cart:
+        print('No items in stock, stopping')
+        exit()
 
-# Go to cart
-wd.get(CART_URL)
-wd.save_screenshot('images/cart.png')
+    # Go to cart
+    wd.get(CART_URL)
+    wd.save_screenshot('images/cart.png')
 
-# Proceed to checkout
-proceed_to_checkout_result = proceed_to_checkout(wd)
-wd.save_screenshot('images/checkout.png')
-if not proceed_to_checkout_result:
-    exit()
+    # Proceed to checkout
+    proceed_to_checkout_result = proceed_to_checkout(wd)
+    wd.save_screenshot('images/checkout.png')
+    if not proceed_to_checkout_result:
+        exit()
 
-# wd.close()
-# wd.quit()
+    # Proceed to payment
+    proceed_to_payment_result = proceed_to_payment(wd)
+    wd.save_screenshot('images/payment.png')
+    if not proceed_to_payment_result:
+        exit()
+
+    # wd.close()
+    # wd.quit()
+
+except Exception as e:
+    wd.save_screenshot('images/error.png')
+    raise e
