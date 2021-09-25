@@ -11,28 +11,22 @@ def add_to_cart(wd):
 
     # Find add to cart button
     add_to_cart_button = wd.find_elements_by_xpath(
-        '//*[@class="ProductCartAndWishlist"]/div[@class="button-group"]/button[@class="Button variant-primary size-normal"]')
-
-    # Check button exists
-    if len(add_to_cart_button) == 1 and add_to_cart_button[0].text.lower() == 'add to cart':
-        # Press button
-        print('Adding to cart')
-        add_to_cart_button[0].click()
-
-        return True
-
-    # Find alternative add to cart button
-    add_to_cart_button_2 = wd.find_elements_by_xpath(
+        '//*[@class="ProductCartAndWishlist"]/div[@class="button-group"]/button[@class="Button variant-primary size-normal"]|'
         '//*[@class="ProductAddToCart"]/button[@class="Button variant-primary size-normal"]')
 
-    # Check button exists
-    if len(add_to_cart_button_2) == 1 and add_to_cart_button_2[0].text.lower() == 'add to cart':
-        # Press button
-        print('Adding to cart')
-        add_to_cart_button_2[0].click()
-
+    # Press button
+    if len(add_to_cart_button) == 1 and add_to_cart_button[0].text.lower() == 'add to cart':
+        print('Adding item to cart')
+        add_to_cart_button[0].click()
         return True
 
-    # Button was not found
-    print('Not available')
+    # No button
+    elif len(add_to_cart_button) == 0:
+        print('No "Add to cart" button found')
+
+    # Multiple buttons
+    else:
+        print('Multiple "Add to cart" buttons found')
+
+    print('Could not add item to cart')
     return False

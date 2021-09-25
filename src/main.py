@@ -7,6 +7,7 @@ import os
 import time
 
 from bigw.cart import add_to_cart
+from bigw.checkout import proceed_to_checkout
 
 load_dotenv()
 
@@ -36,6 +37,7 @@ options.add_argument('--profile-directory=' + PROFILE_NAME)
 wd = webdriver.Chrome(options=options)
 
 # Add PS5 to cart
+item_in_cart = False
 for URL in PS5_URLS:
     print('Checking {}'.format(URL))
 
@@ -49,22 +51,23 @@ for URL in PS5_URLS:
         continue
     time.sleep(0.5)
 
-    # Stop looping if we successfully added to cart
+    # Stop looping if we successfully were able to add to cart
+    item_in_cart = True
     break
+
+if not item_in_cart:
+    print('No items in stock, stopping')
+    exit()
 
 # Go to cart
 wd.get(CART_URL)
 wd.save_screenshot('images/cart.png')
 
 # Proceed to checkout
-wd.find_element_by_xpath(
-    '//div[@class="cart-summary-buttons"]/button[@class="Button variant-primary size-normal"]') \
-    .click()
-wd.find_element_by_xpath(
-    '//div[@class="proceed-button"]/button[@class="Button variant-primary size-normal"]') \
-    .click()
-time.sleep(1.25)
+proceed_to_checkout_result = proceed_to_checkout(wd)
 wd.save_screenshot('images/checkout.png')
+if not proceed_to_checkout_result:
+    exit()
 
 # wd.close()
 # wd.quit()
