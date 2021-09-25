@@ -1,4 +1,4 @@
-
+from datetime import datetime
 from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -8,7 +8,7 @@ import time
 
 from bigw.cart import add_to_cart
 from bigw.checkout import proceed_to_checkout
-from bigw.payment import proceed_to_payment
+from bigw.payment import proceed_to_payment, select_payment_method
 
 load_dotenv()
 
@@ -36,6 +36,7 @@ options.add_argument('--profile-directory=' + PROFILE_NAME)
 
 # Open Chrome
 wd = webdriver.Chrome(options=options)
+wd.maximize_window()
 wd.implicitly_wait(10)
 
 try:
@@ -46,13 +47,15 @@ try:
 
         # Navigate to URL
         wd.get(URL)
-        wd.save_screenshot('images/ps5.png')
+        print(datetime.now().strftime('%Y%m%d_%H%M%S'))
+        wd.save_screenshot('images/{}_ps5.png'.format(datetime.now().strftime('%Y%m%d_%H%M%S')))
 
         # Add to cart if available
         add_to_cart_result = add_to_cart(wd)
         if not add_to_cart_result:
             continue
-        time.sleep(0.5)
+        # TODO: replace explicit wait with waiting for spinner to go
+        time.sleep(1)
 
         # Stop looping if we successfully were able to add to cart
         item_in_cart = True
@@ -64,23 +67,29 @@ try:
 
     # Go to cart
     wd.get(CART_URL)
-    wd.save_screenshot('images/cart.png')
+    wd.save_screenshot('images/{}_cart.png'.format(datetime.now().strftime('%Y%m%d_%H%M%S')))
 
     # Proceed to checkout
     proceed_to_checkout_result = proceed_to_checkout(wd)
-    wd.save_screenshot('images/checkout.png')
+    wd.save_screenshot('images/{}_checkout.png'.format(datetime.now().strftime('%Y%m%d_%H%M%S')))
     if not proceed_to_checkout_result:
         exit()
 
     # Proceed to payment
     proceed_to_payment_result = proceed_to_payment(wd)
-    wd.save_screenshot('images/payment.png')
+    wd.save_screenshot('images/{}_payment.png'.format(datetime.now().strftime('%Y%m%d_%H%M%S')))
     if not proceed_to_payment_result:
+        exit()
+
+    # Select payment method
+    select_payment_method_result = select_payment_method(wd, 'credit card')
+    wd.save_screenshot('images/{}_payment_method.png'.format(datetime.now().strftime('%Y%m%d_%H%M%S')))
+    if not select_payment_method_result:
         exit()
 
     # wd.close()
     # wd.quit()
 
 except Exception as e:
-    wd.save_screenshot('images/error.png')
+    wd.save_screenshot('images/{}_error.png'.format(datetime.now().strftime('%Y%m%d_%H%M%S')))
     raise e
