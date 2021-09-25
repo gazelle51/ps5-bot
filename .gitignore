@@ -133,3 +133,6 @@ Chrome/
 
 # Output images folder
 images/
+
+# Mac files
+.DS_Store
