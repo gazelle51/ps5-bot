@@ -8,10 +8,11 @@ import time
 
 from bigw.cart import add_to_cart
 from bigw.checkout import proceed_to_checkout
-from bigw.payment import proceed_to_payment, select_payment_method
+from bigw.payment import enter_cvv_saved_credit_card, pay_with_credit_card, proceed_to_payment, select_payment_method
 
 load_dotenv()
 
+CVV = os.environ.get('CVV')
 PROFILE_NAME = os.environ.get('PROFILE_NAME')
 
 # PS5 Consoles Pages
@@ -85,6 +86,18 @@ try:
     select_payment_method_result = select_payment_method(wd, 'credit card')
     wd.save_screenshot('images/{}_payment_method.png'.format(datetime.now().strftime('%Y%m%d_%H%M%S')))
     if not select_payment_method_result:
+        exit()
+
+    # Enter CVV
+    enter_cvv_saved_credit_card_result = enter_cvv_saved_credit_card(wd, CVV)
+    wd.save_screenshot('images/{}_cvv.png'.format(datetime.now().strftime('%Y%m%d_%H%M%S')))
+    if not enter_cvv_saved_credit_card_result:
+        exit()
+
+    # Pay with credit card
+    pay_with_credit_card_result = pay_with_credit_card(wd)
+    wd.save_screenshot('images/{}_pay_with_credit_card.png'.format(datetime.now().strftime('%Y%m%d_%H%M%S')))
+    if not pay_with_credit_card_result:
         exit()
 
     # wd.close()
