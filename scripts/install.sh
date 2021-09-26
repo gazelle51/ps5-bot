@@ -5,9 +5,11 @@ fi
 
 # Activate the virtualenv
 source .venv/bin/activate 
+# .venv\Scripts\activate.bat
 
 # Update pip
 python -m pip install --upgrade pip
 
 # Install requirements
 pip3 install -r ./requirements.txt 
+# pip install -r ./requirements.txt 
