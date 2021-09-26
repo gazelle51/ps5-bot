@@ -100,6 +100,7 @@ try:
     if not pay_with_credit_card_result:
         exit()
 
+    # Quit Chrome
     # wd.close()
     # wd.quit()
 

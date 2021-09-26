@@ -24,7 +24,7 @@ bash ./scripts/install.sh
 1. Open Chrome
 2. Click user icon and "Add" other profile.
 3. Fill in details
-4. Go to Big W, make sure you set a local store, log in to your account and the details are kept in cookies.
+4. Go to Big W, make sure you set a local store, log in to your account and the details are kept in cookies. You must have a saved payment method for this to work.
 5. In browser go to chrome://version/
 6. Note the profile path and navigate to that folder.
 7. Copy the folder.
