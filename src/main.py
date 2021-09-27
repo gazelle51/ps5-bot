@@ -90,6 +90,8 @@ try:
     if not proceed_to_payment_result:
         exit()
 
+    # TODO: redeem rewards points
+
     # Select payment method
     select_payment_method_result = select_payment_method(wd, 'credit card')
     wd.save_screenshot('images/{}_payment_method.png'.format(datetime.now().strftime('%Y%m%d_%H%M%S')))
