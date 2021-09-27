@@ -1,3 +1,4 @@
+from bs4 import BeautifulSoup
 from datetime import datetime
 from dotenv import load_dotenv
 from selenium import webdriver
@@ -101,8 +102,6 @@ try:
     if not enter_cvv_saved_credit_card_result:
         exit()
 
-    pay_with_credit_card_result = pay_with_credit_card(wd)
-    wd.save_screenshot('images/{}_pay_with_credit_card.png'.format(datetime.now().strftime('%Y%m%d_%H%M%S')))
     # If not test mode
     if not args.test_mode:
         # Pay with credit card
@@ -111,11 +110,19 @@ try:
         if not pay_with_credit_card_result:
             exit()
 
+        # TODO: check for order confirmation
+
         # Load order confirmation into Beautiful Soup
+        soup = BeautifulSoup(wd.page_source)
 
     # If test mode
     else:
-        print('loading into bs4')
+        print('Skipped payment, loading dummy order confirmation')
+
+        # Load order confirmation into Beautiful Soup
+        soup = BeautifulSoup(open('./src/bigw/order_confirmation.html', encoding="utf8"), "html.parser")
+
+        print(soup.getText())
 
     # Quit Chrome
     # wd.close()
