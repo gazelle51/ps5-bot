@@ -2,6 +2,7 @@ from datetime import datetime
 from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+import argparse
 import chromedriver_binary
 import os
 import time
@@ -12,13 +13,19 @@ from bigw.payment import enter_cvv_saved_credit_card, pay_with_credit_card, proc
 
 load_dotenv()
 
+parser = argparse.ArgumentParser(description='Check for a PS5 in stock at Big W and buy it if it\'s in stock.')
+parser.add_argument('--test', dest='test_mode', action='store_const', const=True, default=False,
+                    help='run in test mode (default: do not run in test mode)')
+args = parser.parse_args()
+
 CVV = os.environ.get('CVV')
 PROFILE_NAME = os.environ.get('PROFILE_NAME')
 
 # PS5 Consoles Pages
 PS5_URLS = [
-    'https://www.bigw.com.au/product/razer-wolverine-v2-controller-xbox/p/133727/',  # Online only in stock,
-    # 'https://www.bigw.com.au/product/playstation-5-console/p/124625/',  # PlayStation 5 Console
+    'https://www.bigw.com.au/product/playstation-5-console/p/124625/',  # PlayStation 5 Console
+] if not args.test_mode else [
+    'https://www.bigw.com.au/product/razer-wolverine-v2-controller-xbox/p/133727/',  # Online only in stock
     # 'https://www.bigw.com.au/product/nintendo-switch-lite-turquoise/p/58260/'  # Special
 ]
 
@@ -94,11 +101,21 @@ try:
     if not enter_cvv_saved_credit_card_result:
         exit()
 
-    # Pay with credit card
     pay_with_credit_card_result = pay_with_credit_card(wd)
     wd.save_screenshot('images/{}_pay_with_credit_card.png'.format(datetime.now().strftime('%Y%m%d_%H%M%S')))
-    if not pay_with_credit_card_result:
-        exit()
+    # If not test mode
+    if not args.test_mode:
+        # Pay with credit card
+        pay_with_credit_card_result = pay_with_credit_card(wd)
+        wd.save_screenshot('images/{}_pay_with_credit_card.png'.format(datetime.now().strftime('%Y%m%d_%H%M%S')))
+        if not pay_with_credit_card_result:
+            exit()
+
+        # Load order confirmation into Beautiful Soup
+
+    # If test mode
+    else:
+        print('loading into bs4')
 
     # Quit Chrome
     # wd.close()
