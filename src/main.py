@@ -10,7 +10,7 @@ import time
 
 from bigw.cart import add_to_cart
 from bigw.checkout import proceed_to_checkout
-from bigw.payment import enter_cvv_saved_credit_card, pay_with_credit_card, proceed_to_payment, select_payment_method
+from bigw.payment import enter_cvv_saved_credit_card, pay_with_credit_card, proceed_to_payment, redeem_rewards_points, select_payment_method
 
 load_dotenv()
 
@@ -56,7 +56,6 @@ try:
 
         # Navigate to URL
         wd.get(URL)
-        print(datetime.now().strftime('%Y%m%d_%H%M%S'))
         wd.save_screenshot('images/{}_ps5.png'.format(datetime.now().strftime('%Y%m%d_%H%M%S')))
 
         # Add to cart if available
@@ -90,7 +89,11 @@ try:
     if not proceed_to_payment_result:
         exit()
 
-    # TODO: redeem rewards points
+    # Redeem rewards points
+    redeem_rewards_points_result = redeem_rewards_points(wd, args.test_mode)
+    wd.save_screenshot('images/{}_redeem_rewards.png'.format(datetime.now().strftime('%Y%m%d_%H%M%S')))
+    if not redeem_rewards_points_result:
+        exit()
 
     # Select payment method
     select_payment_method_result = select_payment_method(wd, 'credit card')
@@ -123,8 +126,6 @@ try:
 
         # Load order confirmation into Beautiful Soup
         soup = BeautifulSoup(open('./src/bigw/order_confirmation.html', encoding="utf8"), "html.parser")
-
-        print(soup.getText())
 
     # Quit Chrome
     # wd.close()

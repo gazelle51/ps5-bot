@@ -16,7 +16,6 @@ def proceed_to_payment(wd):
     # Press button
     if len(proceed_to_payment_button) == 1:
         print('Proceeding to payment')
-        # wd.execute_script("arguments[0].scrollIntoView();", proceed_to_payment_button[0])
         wd.execute_script('arguments[0].click();', proceed_to_payment_button[0])
         return True
 
@@ -29,6 +28,69 @@ def proceed_to_payment(wd):
         print('Multiple "Proceed to payment" buttons found')
 
     print('Could not go to payment')
+    return False
+
+
+def redeem_rewards_points(wd, test_mode):
+    '''
+    Redeem Rewards points if possible.
+    Returns 'True' if the action was successful.
+    Returns 'False' otherwise (e.g., button was not found).
+
+    :param WebDriver wd: Selenium webdriver with page loaded.
+    :param boolean test_mode: whether to run in test mode or not, if True the "Redeem" button won't be pressed.
+    :return: true if successful, otherwise false
+    :rtype: boolean
+    '''
+
+    # Find Rewards payment section
+    rewards_payment_section = wd.find_element_by_xpath('//div[@class="RewardsPaymentOption"]')
+
+    # --- Expand Rewards section
+
+    # Find Rewards plus button
+    rewards_plus_button = rewards_payment_section.find_elements_by_xpath(
+        './/*[local-name() ="svg" and @data-src="/static/icons/plus.svg"]')
+
+    # Press button
+    if len(rewards_plus_button) == 1:
+        print('Expanding Rewards section')
+        rewards_plus_button[0].click()
+
+    else:
+        # No button
+        if len(rewards_plus_button) == 0:
+            print('No Rewards plus button found')
+
+        # Multiple buttons
+        else:
+            print('Multiple Rewards plus buttons found')
+
+        print('Could not redeem Rewards points')
+        return False
+
+    # --- Redeem button
+
+    # Find "Redeem" button
+    redeem_button = rewards_payment_section.find_elements_by_xpath(
+        './/button[@type="submit" and @class="Button variant-primary size-normal submit-button"]')
+
+    # Press button (if not in test mode)
+    if len(redeem_button) == 1:
+        print('Redeeming Rewards points')
+        if not test_mode:
+            wd.execute_script('arguments[0].click();', redeem_button[0])
+        return True
+
+    # No button
+    elif len(redeem_button) == 0:
+        print('No "Redeem" button found')
+
+    # Multiple buttons
+    else:
+        print('Multiple "Redeem" buttons found')
+
+    print('Could not redeem Rewards points')
     return False
 
 
@@ -53,7 +115,7 @@ def select_payment_method(wd, payment_type):
     # Press radio button
     if len(payment_method_radio) == 1:
         print('Selecting payment method "{}"'.format(payment_type))
-        payment_method_radio[0].click()
+        wd.execute_script('arguments[0].click();', payment_method_radio[0])
         return True
 
     # No radio button
@@ -86,6 +148,7 @@ def enter_cvv_saved_credit_card(wd, cvv):
     # Enter text
     if len(cvv_input_box) == 1:
         print('Entering CVV')
+        wd.execute_script("arguments[0].scrollIntoView();", cvv_input_box[0])
         cvv_input_box[0].send_keys(cvv)
         return True
 
@@ -120,7 +183,7 @@ def pay_with_credit_card(wd):
     # Press button
     if len(pay_with_credit_card_button) == 1:
         print('Paying with credit card')
-        pay_with_credit_card_button[0].click()
+        wd.execute_script('arguments[0].click();', pay_with_credit_card_button[0])
         return True
 
     # No button
