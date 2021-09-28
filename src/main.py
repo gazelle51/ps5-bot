@@ -115,7 +115,8 @@ try:
         if not pay_with_credit_card_result:
             exit()
 
-        # TODO: check for order confirmation
+        # Wait for order confirmation
+        wd.find_elements_by_xpath('//div[@class="page-content"]//table')
 
         # Load order confirmation into Beautiful Soup
         soup = BeautifulSoup(wd.page_source)
@@ -126,6 +127,8 @@ try:
 
         # Load order confirmation into Beautiful Soup
         soup = BeautifulSoup(open('./src/bigw/order_confirmation.html', encoding="utf8"), "html.parser")
+
+    # TODO: get order details and save
 
     # Quit Chrome
     # wd.close()
