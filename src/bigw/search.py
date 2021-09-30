@@ -1,6 +1,12 @@
 from bs4 import BeautifulSoup
+import logging
+import logging.config
 import pandas as pd
 import requests
+
+# Load logger
+logging.config.fileConfig('./src/logger.ini', disable_existing_loggers=False)
+logger = logging.getLogger(__name__)
 
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36',
            "Upgrade-Insecure-Requests": "1",
@@ -21,7 +27,7 @@ def search_ps5_availability(search_urls):
     df_rows = []
 
     for URL in search_urls:
-        print('Getting data from {}'.format(URL))
+        logger.info('Getting data from {}'.format(URL))
 
         # Initialise beautiful soup
         page = requests.get(URL, headers=HEADERS)
@@ -54,8 +60,6 @@ def search_ps5_availability(search_urls):
 
     # Load data into Pandas
     df = pd.DataFrame.from_records(df_rows, columns=['Store', 'Product', 'URL', 'Status', 'Price'])
-    print(df)
 
     # Check if any product is available
     isAvailable = any(x in df['Status'].values for x in [None, 'special'])
-    print(isAvailable)

@@ -2,9 +2,10 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from dotenv import load_dotenv
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 import argparse
 import chromedriver_binary
+import logging
+import logging.config
 import os
 import time
 
@@ -13,24 +14,28 @@ from bigw.checkout import proceed_to_checkout
 from bigw.order_confirmation import get_order_data
 from bigw.payment import enter_cvv_saved_credit_card, pay_with_credit_card, proceed_to_payment, redeem_rewards_points, select_payment_method
 
+# Load environment variables
 load_dotenv()
 
+# Load logger
+logging.config.fileConfig('./src/logger.ini', disable_existing_loggers=False)
+logger = logging.getLogger(__name__)
+
+# Load arguments
 parser = argparse.ArgumentParser(description='Check for a PS5 in stock at Big W and buy it if it\'s in stock.')
 parser.add_argument('--test', dest='test_mode', action='store_const', const=True, default=False,
                     help='run in test mode (default: do not run in test mode)')
 args = parser.parse_args()
 
+# Constants
 CVV = os.environ.get('CVV')
 PROFILE_NAME = os.environ.get('PROFILE_NAME')
-
-# PS5 Consoles Pages
 PS5_URLS = [
     'https://www.bigw.com.au/product/playstation-5-console/p/124625/',  # PlayStation 5 Console
 ] if not args.test_mode else [
     'https://www.bigw.com.au/product/razer-wolverine-v2-controller-xbox/p/133727/',  # Online only in stock
     # 'https://www.bigw.com.au/product/nintendo-switch-lite-turquoise/p/58260/'  # Special
 ]
-
 CART_URL = 'https://www.bigw.com.au/cart'
 
 # Create output folder
@@ -53,7 +58,7 @@ try:
     # Add PS5 to cart
     item_in_cart = False
     for URL in PS5_URLS:
-        print('Checking {}'.format(URL))
+        logger.info('Checking {}'.format(URL))
 
         # Navigate to URL
         wd.get(URL)
@@ -71,7 +76,7 @@ try:
         break
 
     if not item_in_cart:
-        print('No items in stock, stopping')
+        logger.info('No items in stock, stopping')
         exit()
 
     # Go to cart
@@ -126,12 +131,10 @@ try:
 
     # If test mode
     else:
-        print('Skipped payment, loading dummy order confirmation')
+        logger.info('Skipped payment, loading dummy order confirmation')
 
         # Load order confirmation into Beautiful Soup
         soup = BeautifulSoup(open('./src/bigw/order_confirmation.html', encoding="utf8"), "html.parser")
-
-    # TODO: file logging
 
     # Set up order data
     order_data = get_order_data(soup)
@@ -147,6 +150,7 @@ try:
     wd.quit()
 
 except Exception as e:
+    logger.exception(e)
     wd.save_screenshot('output/{}_error.png'.format(datetime.now().strftime('%Y%m%d_%H%M%S')))
     # TODO: save HTML
     wd.close()

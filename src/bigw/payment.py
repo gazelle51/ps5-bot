@@ -1,3 +1,11 @@
+import logging
+import logging.config
+
+# Load logger
+logging.config.fileConfig('./src/logger.ini', disable_existing_loggers=False)
+logger = logging.getLogger(__name__)
+
+
 def proceed_to_payment(wd):
     '''
     Press the 'Proceed to payment' button if possible.
@@ -15,19 +23,19 @@ def proceed_to_payment(wd):
 
     # Press button
     if len(proceed_to_payment_button) == 1:
-        print('Proceeding to payment')
+        logger.info('Proceeding to payment')
         wd.execute_script('arguments[0].click();', proceed_to_payment_button[0])
         return True
 
     # No button
     elif len(proceed_to_payment_button) == 0:
-        print('No "Proceed to payment" button found')
+        logger.warn('No "Proceed to payment" button found')
 
     # Multiple buttons
     else:
-        print('Multiple "Proceed to payment" buttons found')
+        logger.warn('Multiple "Proceed to payment" buttons found')
 
-    print('Could not go to payment')
+    logger.error('Could not go to payment')
     return False
 
 
@@ -54,19 +62,19 @@ def redeem_rewards_points(wd, test_mode):
 
     # Press button
     if len(rewards_plus_button) == 1:
-        print('Expanding Rewards section')
+        logger.info('Expanding Rewards section')
         rewards_plus_button[0].click()
 
     else:
         # No button
         if len(rewards_plus_button) == 0:
-            print('No Rewards plus button found')
+            logger.warn('No Rewards plus button found')
 
         # Multiple buttons
         else:
-            print('Multiple Rewards plus buttons found')
+            logger.warn('Multiple Rewards plus buttons found')
 
-        print('Could not redeem Rewards points')
+        logger.error('Could not redeem Rewards points')
         return False
 
     # --- Redeem button
@@ -77,20 +85,20 @@ def redeem_rewards_points(wd, test_mode):
 
     # Press button (if not in test mode)
     if len(redeem_button) == 1:
-        print('Redeeming Rewards points')
+        logger.info('Redeeming Rewards points')
         if not test_mode:
             wd.execute_script('arguments[0].click();', redeem_button[0])
         return True
 
     # No button
     elif len(redeem_button) == 0:
-        print('No "Redeem" button found')
+        logger.warn('No "Redeem" button found')
 
     # Multiple buttons
     else:
-        print('Multiple "Redeem" buttons found')
+        logger.warn('Multiple "Redeem" buttons found')
 
-    print('Could not redeem Rewards points')
+    logger.error('Could not redeem Rewards points')
     return False
 
 
@@ -114,19 +122,19 @@ def select_payment_method(wd, payment_type):
 
     # Press radio button
     if len(payment_method_radio) == 1:
-        print('Selecting payment method "{}"'.format(payment_type))
+        logger.info('Selecting payment method "{}"'.format(payment_type))
         wd.execute_script('arguments[0].click();', payment_method_radio[0])
         return True
 
     # No radio button
     elif len(payment_method_radio) == 0:
-        print('No "{}" payment method radio button found'.format(payment_type))
+        logger.warn('No "{}" payment method radio button found'.format(payment_type))
 
     # Multiple radio buttons
     else:
-        print('Multiple "{}" payment method radio buttons found'.format(payment_type))
+        logger.warn('Multiple "{}" payment method radio buttons found'.format(payment_type))
 
-    print('Could not select a payment method')
+    logger.error('Could not select a payment method')
     return False
 
 
@@ -147,20 +155,20 @@ def enter_cvv_saved_credit_card(wd, cvv):
 
     # Enter text
     if len(cvv_input_box) == 1:
-        print('Entering CVV')
+        logger.info('Entering CVV')
         wd.execute_script("arguments[0].scrollIntoView();", cvv_input_box[0])
         cvv_input_box[0].send_keys(cvv)
         return True
 
     # No input box
     elif len(cvv_input_box) == 0:
-        print('No CVV input box found')
+        logger.warn('No CVV input box found')
 
     # Multiple input boxes
     else:
-        print('Multiple CVV input boxes found')
+        logger.warn('Multiple CVV input boxes found')
 
-    print('Could not enter CVV number')
+    logger.error('Could not enter CVV number')
     return False
 
 
@@ -182,17 +190,17 @@ def pay_with_credit_card(wd):
 
     # Press button
     if len(pay_with_credit_card_button) == 1:
-        print('Paying with credit card')
+        logger.info('Paying with credit card')
         wd.execute_script('arguments[0].click();', pay_with_credit_card_button[0])
         return True
 
     # No button
     elif len(pay_with_credit_card_button) == 0:
-        print('No "Pay with Credit Card" button found')
+        logger.warn('No "Pay with Credit Card" button found')
 
     # Multiple buttons
     else:
-        print('Multiple "Pay with Credit Card" buttons found')
+        logger.warn('Multiple "Pay with Credit Card" buttons found')
 
-    print('Could not pay with credit card')
+    logger.error('Could not pay with credit card')
     return False

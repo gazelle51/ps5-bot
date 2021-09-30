@@ -1,3 +1,11 @@
+import logging
+import logging.config
+
+# Load logger
+logging.config.fileConfig('./src/logger.ini', disable_existing_loggers=False)
+logger = logging.getLogger(__name__)
+
+
 def add_to_cart(wd):
     '''
     Press the 'Add to cart' button if possible.
@@ -16,17 +24,17 @@ def add_to_cart(wd):
 
     # Press button
     if len(add_to_cart_button) == 1 and add_to_cart_button[0].text.lower() == 'add to cart':
-        print('Adding item to cart')
+        logger.info('Adding item to cart')
         add_to_cart_button[0].click()
         return True
 
     # No button
     elif len(add_to_cart_button) == 0:
-        print('No "Add to cart" button found')
+        logger.warn('No "Add to cart" button found')
 
     # Multiple buttons
     else:
-        print('Multiple "Add to cart" buttons found')
+        logger.warn('Multiple "Add to cart" buttons found')
 
-    print('Could not add item to cart')
+    logger.error('Could not add item to cart')
     return False

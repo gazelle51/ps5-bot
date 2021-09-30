@@ -1,3 +1,11 @@
+import logging
+import logging.config
+
+# Load logger
+logging.config.fileConfig('./src/logger.ini', disable_existing_loggers=False)
+logger = logging.getLogger(__name__)
+
+
 def proceed_to_checkout(wd):
     '''
     Press the 'Proceed to checkout' button if possible.
@@ -15,17 +23,17 @@ def proceed_to_checkout(wd):
 
     # Press button
     if len(proceed_to_checkout_button) == 1:
-        print('Proceeding to checkout')
+        logger.info('Proceeding to checkout')
         proceed_to_checkout_button[0].click()
         return True
 
     # No button
     elif len(proceed_to_checkout_button) == 0:
-        print('No "Proceed to checkout" button found')
+        logger.warn('No "Proceed to checkout" button found')
 
     # Multiple buttons
     else:
-        print('Multiple "Proceed to checkout" buttons found')
+        logger.warn('Multiple "Proceed to checkout" buttons found')
 
-    print('Could not go to checkout')
+    logger.error('Could not go to checkout')
     return False
