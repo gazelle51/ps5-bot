@@ -35,7 +35,6 @@ def proceed_to_payment(wd):
     else:
         logger.warn('Multiple "Proceed to payment" buttons found')
 
-    logger.error('Could not go to payment')
     return False
 
 
@@ -74,7 +73,6 @@ def redeem_rewards_points(wd, test_mode):
         else:
             logger.warn('Multiple Rewards plus buttons found')
 
-        logger.error('Could not redeem Rewards points')
         return False
 
     # --- Redeem button
@@ -98,7 +96,6 @@ def redeem_rewards_points(wd, test_mode):
     else:
         logger.warn('Multiple "Redeem" buttons found')
 
-    logger.error('Could not redeem Rewards points')
     return False
 
 
@@ -134,7 +131,6 @@ def select_payment_method(wd, payment_type):
     else:
         logger.warn('Multiple "{}" payment method radio buttons found'.format(payment_type))
 
-    logger.error('Could not select a payment method')
     return False
 
 
@@ -168,7 +164,6 @@ def enter_cvv_saved_credit_card(wd, cvv):
     else:
         logger.warn('Multiple CVV input boxes found')
 
-    logger.error('Could not enter CVV number')
     return False
 
 
@@ -202,5 +197,4 @@ def pay_with_credit_card(wd):
     else:
         logger.warn('Multiple "Pay with Credit Card" buttons found')
 
-    logger.error('Could not pay with credit card')
     return False

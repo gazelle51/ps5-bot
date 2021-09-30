@@ -35,5 +35,4 @@ def proceed_to_checkout(wd):
     else:
         logger.warn('Multiple "Proceed to checkout" buttons found')
 
-    logger.error('Could not go to checkout')
     return False

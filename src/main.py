@@ -87,32 +87,31 @@ try:
     proceed_to_checkout_result = proceed_to_checkout(wd)
     wd.save_screenshot('output/{}_checkout.png'.format(datetime.now().strftime('%Y%m%d_%H%M%S')))
     if not proceed_to_checkout_result:
-        # TODO: error
-        exit()
+        raise Exception('Could not go to checkout')
 
     # Proceed to payment
     proceed_to_payment_result = proceed_to_payment(wd)
     wd.save_screenshot('output/{}_payment.png'.format(datetime.now().strftime('%Y%m%d_%H%M%S')))
     if not proceed_to_payment_result:
-        exit()
+        raise Exception('Could not go to payment')
 
     # Redeem rewards points
     redeem_rewards_points_result = redeem_rewards_points(wd, args.test_mode)
     wd.save_screenshot('output/{}_redeem_rewards.png'.format(datetime.now().strftime('%Y%m%d_%H%M%S')))
     if not redeem_rewards_points_result:
-        exit()
+        raise Exception('Could not redeem Rewards points')
 
     # Select payment method
     select_payment_method_result = select_payment_method(wd, 'credit card')
     wd.save_screenshot('output/{}_payment_method.png'.format(datetime.now().strftime('%Y%m%d_%H%M%S')))
     if not select_payment_method_result:
-        exit()
+        raise Exception('Could not select a payment method')
 
     # Enter CVV
     enter_cvv_saved_credit_card_result = enter_cvv_saved_credit_card(wd, CVV)
     wd.save_screenshot('output/{}_cvv.png'.format(datetime.now().strftime('%Y%m%d_%H%M%S')))
     if not enter_cvv_saved_credit_card_result:
-        exit()
+        raise Exception('Could not enter CVV number')
 
     # If not test mode
     if not args.test_mode:
@@ -120,7 +119,7 @@ try:
         pay_with_credit_card_result = pay_with_credit_card(wd)
         wd.save_screenshot('output/{}_pay_with_credit_card.png'.format(datetime.now().strftime('%Y%m%d_%H%M%S')))
         if not pay_with_credit_card_result:
-            exit()
+            raise Exception('Could not pay with credit card')
 
         # Wait for order confirmation
         wd.find_elements_by_xpath('//div[@class="page-content"]//table')
@@ -151,8 +150,9 @@ try:
 
 except Exception as e:
     logger.exception(e)
+
     wd.save_screenshot('output/{}_error.png'.format(datetime.now().strftime('%Y%m%d_%H%M%S')))
     # TODO: save HTML
+
     wd.close()
     wd.quit()
-    raise e
