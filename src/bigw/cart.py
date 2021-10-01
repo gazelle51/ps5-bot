@@ -26,6 +26,11 @@ def add_to_cart(wd):
     if len(add_to_cart_button) == 1 and add_to_cart_button[0].text.lower() == 'add to cart':
         logger.info('Adding item to cart')
         add_to_cart_button[0].click()
+
+        # Wait for item to successfully add to cart
+        wd.find_element_by_xpath(
+            '//*[@class="ProductAddToCart"]//button[@class="Button variant-primary size-normal decrement"]')
+
         return True
 
     # No button

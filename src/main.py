@@ -68,8 +68,6 @@ try:
         add_to_cart_result = add_to_cart(wd)
         if not add_to_cart_result:
             continue
-        # TODO: replace explicit wait with waiting for spinner to go
-        time.sleep(1)
 
         # Stop looping if we successfully were able to add to cart
         item_in_cart = True
@@ -77,6 +75,11 @@ try:
 
     if not item_in_cart:
         logger.info('No items in stock, stopping')
+
+        # Quit Chrome
+        wd.close()
+        wd.quit()
+
         exit()
 
     # Go to cart
@@ -156,5 +159,6 @@ except Exception as e:
     with open('output/{}_error.html'.format(datetime.now().strftime('%Y%m%d_%H%M%S')), 'w') as f:
         f.write(wd.page_source)
 
+    # Quit Chrome
     wd.close()
     wd.quit()
