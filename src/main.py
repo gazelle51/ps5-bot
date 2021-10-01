@@ -151,8 +151,10 @@ try:
 except Exception as e:
     logger.exception(e)
 
+    # Save error
     wd.save_screenshot('output/{}_error.png'.format(datetime.now().strftime('%Y%m%d_%H%M%S')))
-    # TODO: save HTML
+    with open('output/{}_error.html'.format(datetime.now().strftime('%Y%m%d_%H%M%S')), 'w') as f:
+        f.write(wd.page_source)
 
     wd.close()
     wd.quit()
