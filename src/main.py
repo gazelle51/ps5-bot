@@ -16,17 +16,19 @@ logger = logging.getLogger(__name__)
 
 # Load arguments
 parser = argparse.ArgumentParser(description='Check for a PS5 in stock at Big W and buy it if it\'s in stock.')
+parser.add_argument('--test-set-up', dest='test_set_up', action='store_const', const=True, default=False,
+                    help='run in test set up mode to test Selenium set up (default: do not run in test set up mode)')
 parser.add_argument('--test', dest='test_mode', action='store_const', const=True, default=False,
-                    help='run in test mode to test Selenium set up (default: do not run in test mode)')
+                    help='run in test mode on an item that is in stock (default: do not run in test mode)')
 args = parser.parse_args()
 
 # Wait time in minutes
 WAIT_TIME_MINS = int(os.environ.get('WAIT_TIME_MINS'))
 
-# If script asked to run in test mode, execute find_and_buy_ps5 in test mode
+# If script asked to run in test set up mode, execute find_and_buy_ps5 once in test mode
 # Used to test Selenium set up
-if args.test_mode:
-    find_and_buy_ps5(args.test_mode)
+if args.test_set_up:
+    find_and_buy_ps5(True)
     exit()
 
 logger.info('Starting PS5 buying bot')
@@ -39,14 +41,12 @@ while not success_flag:
     # Try to buy a PS5
     ps5_bought = find_and_buy_ps5(args.test_mode)
 
-    # If bought, then stop
+    # If bought then stop, else wait and try again
     if ps5_bought:
         logger.info('*** PS5 successfully bought ***')
         success_flag = True
     else:
         logger.info('PS5 buy unsuccessful')
-
-    # Wait to try again
-    time.sleep(WAIT_TIME_MINS*60)
+        time.sleep(WAIT_TIME_MINS*60)
 
 logger.info('PS5 buying bot complete')

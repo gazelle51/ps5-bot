@@ -36,7 +36,6 @@ def find_and_buy_ps5(test_mode):
         'https://www.bigw.com.au/product/playstation-5-console/p/124625/',  # PlayStation 5 Console
     ] if not test_mode else [
         'https://www.bigw.com.au/product/razer-wolverine-v2-controller-xbox/p/133727/',  # Online only in stock
-        # 'https://www.bigw.com.au/product/nintendo-switch-lite-turquoise/p/58260/'  # Special
     ]
     CART_URL = 'https://www.bigw.com.au/cart'
 
@@ -49,7 +48,6 @@ def find_and_buy_ps5(test_mode):
     options.add_argument('--ignore-certificate-errors')
     options.add_argument('--user-data-dir=./Chrome')
     options.add_argument('--profile-directory=' + PROFILE_NAME)
-    # options.add_argument('--headless')
 
     # Open Chrome
     wd = webdriver.Chrome(options=options)
