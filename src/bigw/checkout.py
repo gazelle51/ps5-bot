@@ -24,7 +24,7 @@ def proceed_to_checkout(wd):
     # Press button
     if len(proceed_to_checkout_button) == 1:
         logger.info('Proceeding to checkout')
-        proceed_to_checkout_button[0].click()
+        wd.execute_script('arguments[0].click();', proceed_to_checkout_button[0])
         return True
 
     # No button
