@@ -12,6 +12,8 @@ I decided to build in Python and here we are.
 
 ## Installation
 
+Built in Python 3.9.7.
+
 To install the bot first ensure Python 3.9+ is installed on your machine. Then run
 
 ```bash
