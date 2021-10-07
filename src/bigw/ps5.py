@@ -1,3 +1,4 @@
+import pathlib
 from bs4 import BeautifulSoup
 from datetime import datetime
 from selenium import webdriver
@@ -44,9 +45,10 @@ def find_and_buy_ps5(test_mode):
         os.makedirs('output')
 
     # Set Chrome options
+    script_directory = pathlib.Path().absolute()
     options = webdriver.ChromeOptions()
     options.add_argument('--ignore-certificate-errors')
-    options.add_argument('--user-data-dir=./Chrome')
+    options.add_argument('--user-data-dir={}'.format(os.path.join(script_directory, "Chrome")))
     options.add_argument('--profile-directory=' + PROFILE_NAME)
 
     # Open Chrome
