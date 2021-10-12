@@ -10,7 +10,7 @@ This script uses Google Chrome and assumes you are already logged in to the Big 
 
 ## Installation
 
-To install the script first ensure Python 3.9+ is installed on your machine (this was built in Python 3.9.7). 
+To install the script first ensure Python 3.9+ and Google Chrome is installed on your machine (this was built in Python 3.9.7). 
 
 To install a virtual environment and dependencies run `bash ./scripts/install.sh` on Mac/Linux or double click `./scripts/install.cmd` on Windows.
 
@@ -49,3 +49,6 @@ To test the repeating job run `bash ./scripts/test.sh` on Mac/Linux or double cl
 
 To run the script run `bash ./scripts/run.sh` on Mac/Linux or double click `./scripts/run.cmd` on Windows.
 
+## Potential issues
+
+* The Chrome driver binary version make not be compatible with your version of Chrome. You can check available versions at https://pypi.org/project/chromedriver-binary/#history, make sure it aligns (or is as close to) the version mentioned at [chrome://version/](chrome://version/).
